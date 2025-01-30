@@ -1,16 +1,8 @@
 //* Polyfill for async/await and other ES6 features
-import "core-js/stable";
-import "regenerator-runtime/runtime";
+/* import "core-js/stable";
+import "regenerator-runtime/runtime"; */
 
 const recipeContainer = document.querySelector(".recipe");
-
-const timeout = function (s) {
-  return new Promise(function (_, reject) {
-    setTimeout(function () {
-      reject(new Error(`Request took too long! Timeout after ${s} second`));
-    }, s * 1000);
-  });
-};
 
 // https://forkify-api.herokuapp.com/v2 //* API Documentation
 
@@ -25,10 +17,12 @@ const renderSpinner = function (parentEl) {
 
 const showRecipe = async function () {
   try {
+    const id = window.location.hash.slice(1);
+    if (!id) return;
     // 1. Loading Recipe
     renderSpinner(recipeContainer);
     const res = await fetch(
-      "https://forkify-api.jonas.io/api/v2/recipes/5ed6604591c37cdc054bc886?key=<ba869ee3-2c34-496d-a309-1f29c3ce56b6>"
+      `https://forkify-api.jonas.io/api/v2/recipes/${id}?key=<281097b3-1af9-4ed3-a85d-9f349855f6b0>`
     );
     const data = await res.json();
     if (!res.ok) throw new Error(`${data.message} (${res.status})`);
@@ -146,4 +140,7 @@ const showRecipe = async function () {
     alert(err);
   }
 };
-showRecipe();
+
+["hashchange", "load"].forEach((event) =>
+  window.addEventListener(event, showRecipe)
+);
