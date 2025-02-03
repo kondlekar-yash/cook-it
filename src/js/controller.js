@@ -1,5 +1,6 @@
 import * as model from "./model.js";
 import recipeView from "./views/recipeView.js";
+import searchView from "./views/searchView.js";
 
 //* Polyfill for async/await and other ES6 features
 import "core-js/stable";
@@ -20,12 +21,23 @@ const controlRecipes = async function () {
     // 2. Rendering Recipe
     recipeView.render(model.state.recipe);
   } catch (err) {
-    //console.log(err);
     recipeView.renderErrror();
+  }
+};
+
+const controlSearchResults = async function () {
+  try {
+    // Get and search query
+    const query = searchView.getQuery();
+    if (!query) return;
+    await model.loadSearchResults(query);
+  } catch (err) {
+    console.log(err);
   }
 };
 
 const init = function () {
   recipeView.addHandlerRender(controlRecipes);
+  searchView.addHandlerSearch(controlSearchResults);
 };
 init();
