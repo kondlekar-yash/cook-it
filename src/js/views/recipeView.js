@@ -1,6 +1,7 @@
 class RecipeView {
   #parentElement = document.querySelector(".recipe");
   #data;
+  #errorMessage = "Could not find that recipe. Please try another one!";
 
   render(data) {
     this.#data = data;
@@ -12,14 +13,26 @@ class RecipeView {
   #clear() {
     this.#parentElement.innerHTML = "";
   }
-  renderSpinner = function () {
+  renderSpinner() {
     const markup = `<div class="spinner">
     <svg>
       <use href="src/img/icons.svg#icon-loader"></use>
     </svg>`;
-    this.#parentElement.innerHTML = "";
+    this.#clear();
     this.#parentElement.insertAdjacentHTML("afterbegin", markup);
-  };
+  }
+
+  renderErrror(message = this.#errorMessage) {
+    const markup = `<div class="error">
+    <div>
+      <svg>
+        <use href="src/img/icons.svg#icon-alert-triangle"></use>
+      </svg>
+    </div>
+    <p>${message}</p>`;
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML("afterbegin", markup);
+  }
 
   addHandlerRender(handler) {
     ["hashchange", "load"].forEach((event) =>
@@ -123,9 +136,6 @@ class RecipeView {
           ${ing.description}
         </div>
       </li>`;
-  }
-  catch(err) {
-    alert(err);
   }
 }
 
