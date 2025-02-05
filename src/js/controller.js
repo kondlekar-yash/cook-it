@@ -2,6 +2,7 @@ import * as model from "./model.js";
 import recipeView from "./views/recipeView.js";
 import searchView from "./views/searchView.js";
 import resultsView from "./views/resultsView.js";
+import paginationView from "./views/paginationView.js";
 
 //* Polyfill for async/await and other ES6 features
 import "core-js/stable";
@@ -38,7 +39,10 @@ const controlSearchResults = async function () {
     const query = searchView.getQuery();
     if (!query) return;
     await model.loadSearchResults(query);
-    resultsView.render(model.state.search.results);
+
+    resultsView.render(model.getSearchResultsPage());
+
+    paginationView.render(model.state.search);
   } catch (err) {
     console.log(err);
   }
