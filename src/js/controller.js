@@ -3,6 +3,7 @@ import recipeView from "./views/recipeView.js";
 import searchView from "./views/searchView.js";
 import resultsView from "./views/resultsView.js";
 import paginationView from "./views/paginationView.js";
+import bookmarksView from "./views/bookmarksView.js";
 
 //* Polyfill for async/await and other ES6 features
 import "core-js/stable";
@@ -23,6 +24,7 @@ const controlRecipes = async function () {
     recipeView.renderSpinner();
 
     resultsView.update(model.getSearchResultsPage()); //* Highlighting the selected recipe
+    bookmarksView.update(model.state.bookmarks);
 
     // 1. Loading Recipe
     await model.loadRecipe(id);
@@ -69,6 +71,9 @@ const controlAddBookmark = function () {
 
   // Update recipe view
   recipeView.update(model.state.recipe);
+
+  // Render bookmarks
+  bookmarksView.render(model.state.bookmarks);
 };
 
 const init = function () {
