@@ -49,8 +49,6 @@ export default class View {
 
   update(data) {
     //* minor algo to update only the changed parts of DOM instead of re-rendering completely
-    if (!data || (Array.isArray(data) && data.length === 0))
-      return this.renderErrror();
     this._data = data;
     const newMarkup = this._generateMarkup();
 
